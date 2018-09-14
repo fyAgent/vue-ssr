@@ -8,9 +8,9 @@
 
 <script>
 export default {
-  // asyncData({store,route}){
-  //   return store.commit("increment")
-  // },
+  asyncData({store,route}){
+    return store.commit("increment")
+  },
   computed:{
     list(){
       return this.$store.state.items
