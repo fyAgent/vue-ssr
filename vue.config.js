@@ -4,11 +4,10 @@ const nodeExternals=require("webpack-node-externals")
 const merge = require("lodash.merge")
 const TARGET_NODE = process.env.WEBPACK_TARGET === 'node'
 const target = TARGET_NODE ? 'server' : 'client'
-
 module.exports={
     configureWebpack:()=>({
         // 将 entry 指向应用程序的 server / client 文件
-        entry:`./src/entry_${target}.js`,
+        entry:`./src/entry-${target}.js`,
         // 对 bundle renderer 提供 source map 支持
         devtool:"source-map",
         target:TARGET_NODE ? "node" :"web",

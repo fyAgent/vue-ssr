@@ -1,21 +1,29 @@
 <template>
   <div class="about">
-    <h1 v-for="val in items" :key="val" >
-      {{val}}
-    </h1>
+    <h1>This is an about page</h1>
+    <span>以下是服务端渲染的数据</span>
+    {{item}}
   </div>
 </template>
 
 <script>
+import aboutStoreModule from "../store/modules/about";
 export default {
-  asyncData({store,route}){
-    return store.commit("increment")
+  asyncData({ store }) {
+    // 触发 action 后，会返回 Promise
+    store.registerModule("about", aboutStoreModule);
+    return store.dispatch("about/fetchItem");
   },
-  computed:{
-    list(){
-      return this.$store.state.items
+  computed: {
+    // 从 store 的 state 对象中的获取 item。
+    item() {
+       return this.$store.state.about.items;
     }
-  }
-}
-</script>
+  },
+   // 避免在客户端重复注册模块。
+  destroyed() {
+    this.$store.unregisterModule("about");
+  },
 
+};
+</script>
