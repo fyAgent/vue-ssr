@@ -3,7 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export function createRouter() {
-  return new Router({
+  const router = new Router({
     base: "/",
     mode: "history",
     routes: [
@@ -23,7 +23,22 @@ export function createRouter() {
       }
     ]
   })
+  router.beforeEach((to, from, next) => {
+    const matched = router.getMatchedComponents(to);
+    const prevMatched = router.getMatchedComponents(from);
+    // 我们只关心非预渲染的组件
+    // 所以我们对比它们，找出两个匹配列表的差异组件
+    let diffed = false
+    const activated = matched.filter((c, i) => {
+      return diffed || (diffed = (prevMatched[i] !== c && prevMatched.length !== 0))
+    })
+    console.log(diffed)
+    console.log(activated, !activated.length)
+    next()
+  })
 
+
+  return router
 
 
 }

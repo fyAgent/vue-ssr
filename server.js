@@ -1,8 +1,10 @@
 const path = require("path")
+const url = require("url");
 const fs = require("fs")
 const Koa = require("koa")
 const KoaStatic = require("koa-static")
 const KoaRouter = require("koa-router")
+const koaBody = require("koa-body")
 const { createBundleRenderer } = require('vue-server-renderer')
 const resolve = file => path.resolve(__dirname, file);
 const app = new Koa();
@@ -23,19 +25,15 @@ function renderToString(context) {
     });
   });
 }
-// 测试
-koarouter.get("/list.do", (ctx, next) => {
-  ctx.set("Content-Type", "application/json;charset=utf-8");
-  ctx.body = {
-    data: [
-      {
-        name: "zhangsan",
 
-      },
-      {
-        name: "lisi"
-      }
-    ]
+// 测试
+koarouter.post("/list.do", koaBody(), (ctx, next) => {
+  ctx.set("Content-Type", "application/json;charset=utf-8");
+
+  const message = Object.assign({ message: "这是测试的一条信息" }, ctx.request.body);
+
+  ctx.body = {
+    data: message
   }
 })
 
@@ -43,7 +41,7 @@ koarouter.get("/list.do", (ctx, next) => {
 //渲染
 koarouter.get("*", async (ctx, next) => {
   const context = { url: ctx.url };
-  console.log(ctx.url)
+
   // 这里无需传入一个应用程序，因为在执行 bundle 时已经自动创建过。
   // 现在我们的服务器与应用程序已经解耦！
   if (ctx.url.indexOf("do") < 0) {
@@ -53,12 +51,16 @@ koarouter.get("*", async (ctx, next) => {
     next()
   }
 })
-
 app.use(KoaStatic(resolve('./dist')))
+
 app.use(koarouter.routes())
 
+try {
+  app.listen(3000)
+} catch (err) {
+  console.error(err)
+}
 
-app.listen(3000)
 
 
 
