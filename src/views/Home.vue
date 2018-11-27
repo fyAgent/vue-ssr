@@ -18,11 +18,14 @@
 </template>
 
 <script>
-import homeStoreModule from "../store/modules/home";
-import axios from "axios";
+import { fetch } from "@/fetch";
+// import home from "@/store/modules/home";
+// import "@/assets/css/home.scss"; 这样引入暂时会报错  document not find  应该是在服务端操作dom了
 export default {
   asyncData({ store, route }) {
-    store.registerModule("home", homeStoreModule);
+    //服务端渲染
+    // store.registerModule("home", home);
+
     // 触发 action 后，会返回 Promise
 
     return store.dispatch("home/fetchItem", route.query);
@@ -39,19 +42,23 @@ export default {
       return this.$store.state.home.items;
     }
   },
-
-  // 避免在客户端重复注册模块。
-  destroyed() {
-    this.$store.unregisterModule("home");
-  },
-
   created() {
-    
+    this.initData(); //发送一个客户端请求
   },
+
   methods: {
     handleItemClick(name) {
       alert(name);
+    },
+    initData() {
+      fetch({
+        url: "/list.do",
+        data: this.$route.query
+      }).then(data => {
+        this.list = data;
+      });
     }
   }
 };
 </script>
+

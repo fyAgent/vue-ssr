@@ -1,4 +1,4 @@
-import axios from "axios";
+import {fetch} from "@/fetch";
 import Vue from "vue";
 export default {
     namespaced: true,
@@ -10,13 +10,13 @@ export default {
         }
     }),
     actions: {
-        fetchItem: ({ commit }) => {
-            return axios("http://127.0.0.1:3000/list.do").then(item => {
-              
-                commit('setItem', item.data.data)
-            }).catch(err => {
-               
-                console.log(err)
+        fetchItem: ({ commit },params) => {
+            return fetch({
+
+                url: "/list.do",
+                data: params
+            }).then(data => {
+                commit('setItem', data)
             })
         }
     },

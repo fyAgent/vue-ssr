@@ -1,8 +1,13 @@
 <template>
   <div class="about">
     <h1>This is an about page</h1>
+    <!-- <h2>hahaha</h2> -->
     <span>以下是服务端渲染的数据</span>
-    {{item}}
+    <ul>
+      <li v-for="(val,key) in item" :key="key" @click="handleItemClick(val)">
+        {{key}}:{{val}}
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -17,13 +22,12 @@ export default {
   computed: {
     // 从 store 的 state 对象中的获取 item。
     item() {
-       return this.$store.state.about.items;
+      return this.$store.state.about.items;
     }
   },
-   // 避免在客户端重复注册模块。
-  destroyed() {
+  destoryed(to, from, next) {
     this.$store.unregisterModule("about");
   },
-
+  // 避免在客户端重复注册模块。
 };
 </script>

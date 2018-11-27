@@ -1,16 +1,25 @@
 # vue-ssr3
 
-## Project setup
+## 安装依赖
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 启动开发环境
 ```
-npm run serve
+npm run dev
 ```
-
-### Compiles and minifies for production
+### 打包生产环境
 ```
 npm run build
 ```
+### 运行生产服务
+```
+npm run server
+```
+### 打包并运行生产服务
+```
+npm run pm2 通过pm2部署服务 需要事先安装pm2
+```
+
+

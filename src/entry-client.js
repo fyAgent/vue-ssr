@@ -24,21 +24,23 @@ router.onReady(() => {
     })
 
 
-    if (!activated.length) {
-      return next()
-    } else {
-      Promise.all(activated.map(c => {
-        if (c.asyncData) {
-          return c.asyncData({ store, route: to })
-        }
-      })).then(() => {
+    // if (!activated.length) {
+    //   return next()
+    // }
+   
+    Promise.all(activated.map(c => {
+      if (c.asyncData) {
+        
+        return c.asyncData({ store, route: to })
+      }
+    })).then(() => {
 
-        // 停止加载指示器(loading indicator)
+      // 停止加载指示器(loading indicator)
 
-        next()
-      }).catch(next)
-    }
+      next()
+    }).catch(next)
+
 
   })
-  app.$mount('#app')
+  app.$mount('#app', true)
 })

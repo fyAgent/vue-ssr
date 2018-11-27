@@ -1,4 +1,4 @@
-import axios from "axios";
+import {fetch} from "@/fetch";
 import Vue from "vue";
 export default {
     namespaced: true,
@@ -11,17 +11,12 @@ export default {
     },
     actions: {
         fetchItem: ({ commit }, params) => {
-            return axios({
-                method: 'post',
-                url: "http://127.0.0.1:3000/list.do",
+            return fetch({
+                url: "/list.do",
                 data: params
-            }).then(item => {
-                commit('setItem', item.data.data)
-            }).catch(err => {
-                console.error(err)
+            }).then(data => {
+                commit('setItem', data)
             })
-
-
         }
     },
     mutations: {
