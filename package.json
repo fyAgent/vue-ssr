@@ -9,7 +9,7 @@
     "watch": "vue-cli-service serve",
     "dev": "concurrently \"npm run watch\" \"cross-env WEBPACK_TARGET=node node ./server/ssr.js\" ",
     "server": "cross-env NODE_ENV=production WEBPACK_TARGET=node node ./server/ssr.js",
-    "server-dev":"node ./server/ssr.js",
+    "server-dev": "node ./server/ssr.js",
     "pm2": "pm2 start ./server/pm2.config.js --env production"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "dayjs": "^1.7.7",
     "koa": "^2.5.3",
     "koa-body": "^4.0.4",
+    "koa-bodyparser": "^4.2.1",
     "koa-static": "^5.0.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",

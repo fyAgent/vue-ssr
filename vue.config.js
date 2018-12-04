@@ -4,14 +4,14 @@ const nodeExternals = require("webpack-node-externals")
 const merge = require("lodash.merge")
 const TARGET_NODE = process.env.WEBPACK_TARGET === 'node'
 const target = TARGET_NODE ? 'server' : 'client';
-
+const path =require("path");
+const resolve = file => path.resolve(__dirname, file);
 const isDev = process.env.NODE_ENV !== 'production'
 module.exports = {
     baseUrl: isDev ? 'http://127.0.0.1:8080' : '',
-
     configureWebpack: () => ({
         // 将 entry 指向应用程序的 server / client 文件
-        entry: `./src/entry-${target}.js`,
+        entry: resolve(`./src/entry-${target}.js`),
         // 解决跨域
         devServer: {
             headers: {

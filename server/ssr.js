@@ -6,13 +6,13 @@ const resolve = file => path.resolve(__dirname, file);
 const app = new Koa()
 const chalk = require('chalk')
 const isDev = process.env.NODE_ENV !== 'production';
-const crossDomain = require("./controller/crossDomain")
+const bodyParser = require("koa-bodyparser")
 
 const router = isDev ? require(resolve('./dev.ssr')) : require(resolve('./server'));
-
-app.use(crossDomain)//解决跨域
+app.use(bodyParser());
 app.use(koaStatic(resolve("../dist")));// 静态资源服务
-app.use(router.routes()).use(router.allowedMethods()) //后台路由
+
+app.use(router.routes()).use(router.allowedMethods())//后台路由
 
 const port = process.env.PORT || 3000;
 

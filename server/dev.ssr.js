@@ -14,11 +14,8 @@ const mfs = new MemoryFs();
 // 指定输出文件到的内存流中
 serverCompiler.outputFileSystem = mfs;
 
-
-
-
 serverCompiler.watch({}, (err, stats) => {
-    console.log("%c 页面改变", "color:green")
+
     if (err) {
         throw err
     }
@@ -26,11 +23,16 @@ serverCompiler.watch({}, (err, stats) => {
     stats.errors.forEach(err => console.error(err))
     stats.warnings.forEach(warn => console.warn(warn))
     const bundlePath = path.join(
+
         webpackConfig.output.path,
         'vue-ssr-server-bundle.json'
-    )
+    );
+
+
     try {
-        bundle = JSON.parse(mfs.readFileSync(bundlePath, 'utf-8'))
+        const data = fs.readFileSync(bundlePath, 'utf-8')
+
+        bundle = JSON.parse(data)
     } catch (err) {
         console.log("捕获异常")
         console.error(err)
@@ -40,17 +42,22 @@ serverCompiler.watch({}, (err, stats) => {
 })
 // 处理请求
 let bundle
-const handleRequest = async ctx => {
+const handleRequest = async function (ctx, next) {
 
-    console.log(chalk.red('handleRequest:', chalk.underline.bgGreen(ctx.request.url)))
+    console.log(chalk.red('handleRequest:', chalk.underline.bgGreen(ctx.request.url)));
+
+
     if (!bundle) {
         ctx.body = 'please wait...'
         return
     }
-    
+
     // 4、获取最新的 vue-ssr-client-manifest.json
-    const clientManifestResp = await axios.get('http://localhost:8080/vue-ssr-client-manifest.json')
-    const clientManifest = clientManifestResp.data
+
+    const clientManifestResp = await axios.get('http://localhost:8080/vue-ssr-client-manifest.json');
+
+
+    const clientManifest = clientManifestResp.data;
 
     const renderer = createBundleRenderer(bundle, {
         runInNewContext: false,
@@ -58,7 +65,7 @@ const handleRequest = async ctx => {
         clientManifest: clientManifest
     });
     const html = await renderToString(ctx, renderer)
-
+    ctx.type = 'text/html; charset=utf-8';
     ctx.body = html;
 }
 function renderToString(context, renderer) {
